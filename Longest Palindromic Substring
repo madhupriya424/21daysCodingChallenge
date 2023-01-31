@@ -1,0 +1,55 @@
+class Solution {
+    public String longestPalindrome(String s) {
+        if (s.length() == 1)
+            return s;
+        else if (s.length() == 2){
+            if (s.charAt(0) == s.charAt(1)) {
+                return s;
+            } else
+                return "" + s.charAt(0);
+        }    
+
+        // aaaabbaa  7*7 table
+        boolean dp[][] = new boolean[s.length()][s.length()];
+        int n = s.length();
+        // For string length 1
+        int maxLength = 1;
+        for (int i = 0; i < dp[0].length; i++) {   // i < n
+            dp[i][i] = true;  // start filling the diagonal
+        }
+        
+        // For string length 2
+        int start = 2;
+         for (int i = 0; i < dp[0].length - 1; i++) {  // i < n - 1
+             if (s.charAt(i) == s.charAt(i+1)) {
+                 dp[i][i+1] = true;
+                 start = i;
+                 maxLength = 2;
+             }
+        }
+
+        // For string length more than 2
+        for (int k = 3; k <= n ; k++) {  // n is the length of the string
+            for (int i = 0; i < n - k + 1; i++) {
+                int j = i + k - 1; // becoz string starts from index no.
+                if (s.charAt(i) == s.charAt(j) && dp[i+1][j-1] == true) {
+                    dp[i][j] = true;
+
+                    if (maxLength < k) {
+                        start = i;
+                        maxLength = k;
+                    }
+                }
+            }
+        }
+
+        String res = "";
+        for ( int i = start; i < start + maxLength; i++) {
+            res += s.charAt(i);
+        }
+
+        return res;
+    }
+}
+
+https://leetcode.com/problems/longest-palindromic-substring/description/
